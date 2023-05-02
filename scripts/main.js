@@ -5,13 +5,10 @@ searchForm.onsubmit = (ev) => {
   ev.preventDefault();
   foodUL.innerHTML = "";
   getTime();
-  // https://stackoverflow.com/a/26892365/1449799
   const formData = new FormData(ev.target);
 
   const queryText = formData.get("query");
   // console.log("queryText", queryText);
-
-
   const recipes = getRecipes(queryText);
   recipes.then((recipe) => {
     const mealsArray = recipe.meals;
@@ -22,8 +19,7 @@ searchForm.onsubmit = (ev) => {
   });
 };
 
-
-const getRecipieLink = (word) => {
+const getRecipeLink = (word) => {
   // const apiKey = "33991f0720b24445860d544fbd81853f";
   console.log("attempting to get recipie for", word);
   return fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${word}&number=1&addRecipeInformation=true`)
@@ -36,15 +32,6 @@ const getRecipieLink = (word) => {
 
 }
 
-
-
-const getRhymes = (word) => {
-  console.log("attempting to get rhymes for", word);
-  return fetch(
-    `https://rhymebrain.com/talk?function=getRhymes&word=${word}`
-  ).then((resp) => resp.json());
-};
-
 const getRecipes = (word) => {
   return fetch(
     `https://themealdb.com/api/json/v1/1/filter.php?a=${word}&apiKey=1`
@@ -56,13 +43,9 @@ const createFood = (recipe) => {
   const img = document.createElement("img");
   // const name = document.createElement("p");
   const name = document.createElement("button");
-
-  name.onclick = () => getRecipieLink(recipe.strMeal);
-
-
+  name.onclick = () => getRecipeLink(recipe.strMeal);
   name.textContent = recipe.strMeal;
   foodList.appendChild(img);
-
   foodList.appendChild(name);
   img.src = recipe.strMealThumb;
   img.width = 300;
@@ -72,12 +55,11 @@ const createFood = (recipe) => {
 
 const getTime = () => {
   const url = `http://worldtimeapi.org/api/ip`;
-
   return fetch(url).then((resp) => resp.json()).then(data => {
     const datetime = new Date(data.datetime);
     const date = datetime.toLocaleDateString();
     const time = datetime.toLocaleTimeString();
     const timeOfDay = document.getElementById("timeOfDay");
-    timeOfDay.innerText = `The current date is: ${date}\n The current time is: ${time}`;
+    timeOfDay.innerText = `The current date is: ${date}\nThe current time is: ${time}`;
   });
 };
