@@ -7,7 +7,7 @@ searchForm.onsubmit = (ev) => {
   getTime();
   // https://stackoverflow.com/a/26892365/1449799
   const formData = new FormData(ev.target);
-  
+
   const queryText = formData.get("query");
   // console.log("queryText", queryText);
 
@@ -21,6 +21,22 @@ searchForm.onsubmit = (ev) => {
     });
   });
 };
+
+
+const getRecipieLink = (word) => {
+  // const apiKey = "33991f0720b24445860d544fbd81853f";
+  console.log("attempting to get recipie for", word);
+  return fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${word}&number=1&addRecipeInformation=true`)
+    .then(response => response.json())
+    .then(data => {
+      const recipeLink = data.results[0].spoonacularSourceUrl;
+      window.open(recipeLink, "_blank");
+    })
+    .catch(error => console.log(error));
+
+}
+
+
 
 const getRhymes = (word) => {
   console.log("attempting to get rhymes for", word);
@@ -38,11 +54,15 @@ const getRecipes = (word) => {
 const createFood = (recipe) => {
   const foodList = document.createElement("div");
   const img = document.createElement("img");
-  const name = document.createElement("p");
+  // const name = document.createElement("p");
+  const name = document.createElement("button");
+
+  name.onclick = () => getRecipieLink(recipe.strMeal);
+
 
   name.textContent = recipe.strMeal;
   foodList.appendChild(img);
-  
+
   foodList.appendChild(name);
   img.src = recipe.strMealThumb;
   img.width = 300;
@@ -52,7 +72,7 @@ const createFood = (recipe) => {
 
 const getTime = () => {
   const url = `http://worldtimeapi.org/api/ip`;
-  
+
   return fetch(url).then((resp) => resp.json()).then(data => {
     const datetime = new Date(data.datetime);
     const date = datetime.toLocaleDateString();
@@ -61,4 +81,3 @@ const getTime = () => {
     timeOfDay.innerText = `The current date is: ${date}\n The current time is: ${time}`;
   });
 };
-
