@@ -51,14 +51,28 @@ const createFood = (recipe) => {
 };
 
 const getTime = () => {
-  const url = `http://worldtimeapi.org/api/ip`;
+  // const url = `http://worldtimeapi.org/api/ip`;
   
-  return fetch(url).then((resp) => resp.json()).then(data => {
-    const datetime = new Date(data.datetime);
-    const date = datetime.toLocaleDateString();
-    const time = datetime.toLocaleTimeString();
-    const timeOfDay = document.getElementById("timeOfDay");
-    timeOfDay.innerText = `The current date is: ${date}\n The current time is: ${time}`;
+  // return fetch(url).then((resp) => resp.json()).then(data => {
+  //   const datetime = new Date(data.datetime);
+  //   const date = datetime.toLocaleDateString();
+  //   const time = datetime.toLocaleTimeString();
+  //   const timeOfDay = document.getElementById("timeOfDay");
+  //   timeOfDay.innerText = `The current date is: ${date}\n The current time is: ${time}`;
+  // });
+  fetch('https://api.ipify.org?format=json')
+  .then(response => response.json())
+  .then(data => {
+    const ip = data.ip;
+    fetch(`http://worldtimeapi.org/api/ip/${ip}`)
+      .then(response => response.json())
+      .then(data => {
+        const datetime = new Date(data.datetime);
+        const date = datetime.toLocaleDateString();
+        const time = datetime.toLocaleTimeString();
+        const timeOfDay = document.getElementById("timeOfDay");
+        timeOfDay.innerText = `The current date is: ${date}\n The current time is: ${time}`;
+      })
   });
 };
 
