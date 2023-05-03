@@ -8,7 +8,6 @@ searchForm.onsubmit = (ev) => {
   const formData = new FormData(ev.target);
 
   const queryText = formData.get("query");
-  // console.log("queryText", queryText);
   const recipes = getRecipes(queryText);
   recipes.then((recipe) => {
     const mealsArray = recipe.meals;
@@ -20,8 +19,8 @@ searchForm.onsubmit = (ev) => {
 };
 
 const getRecipeLink = (word) => {
-  // const apiKey = "33991f0720b24445860d544fbd81853f";
-  console.log("attempting to get recipie for", word);
+  const apiKey = "33991f0720b24445860d544fbd81853f";
+  console.log("attempting to get recipe for", word);
   return fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${word}&number=1&addRecipeInformation=true`)
     .then(response => response.json())
     .then(data => {
@@ -41,7 +40,6 @@ const getRecipes = (word) => {
 const createFood = (recipe) => {
   const foodList = document.createElement("div");
   const img = document.createElement("img");
-  // const name = document.createElement("p");
   const name = document.createElement("button");
   name.onclick = () => getRecipeLink(recipe.strMeal);
   name.textContent = recipe.strMeal;
